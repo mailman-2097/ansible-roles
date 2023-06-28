@@ -1,0 +1,19 @@
+---
+# - name: Show facts available on the system
+#   ansible.builtin.debug:
+#     var: ansible_facts
+
+- name: package install if redhat
+  import_tasks: redhat.yml
+  when: ansible_facts['os_family']|lower == 'redhat'
+
+- name: package install if debian
+  import_tasks: debian.yml
+  when: ansible_facts['distribution']|lower == 'debian'
+
+- name: package install if ubuntu
+  import_tasks: ubuntu.yml
+  when: ansible_facts['distribution']|lower == 'ubuntu'
+
+- name: ocp tools install
+  import_tasks: ocp_tools.yml

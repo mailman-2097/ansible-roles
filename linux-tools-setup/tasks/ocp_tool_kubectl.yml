@@ -1,0 +1,47 @@
+---
+
+- name: Set proxy environment variables
+  ansible.builtin.set_fact:
+    http_proxy: lookup('ansible.builtin.env', 'http_proxy')
+    https_proxy: lookup('ansible.builtin.env', 'http_proxy')
+    no_proxy: localhost,127.0.0.1
+
+- name: Download kubectl
+  get_url:
+    url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
+    dest: /tmp/openshift-client-linux.tar.gz
+
+- name: Extract kubectl
+  become: true
+  become_method: sudo
+  unarchive:
+    src: /tmp/openshift-client-linux.tar.gz
+    dest: /usr/local/bin
+    owner: root
+    group: root
+    mode: '0755'
+    exclude:
+      - LICENSE
+      - README.md
+
+- name: Get kubectl version
+  command: kubectl version
+  register: kubectl_version
+  ignore_errors: true
+  changed_when: false
+  failed_when: "'FAILED' in kubectl_version.stderr"
+
+- name: Print kubectl version
+  debug:
+    msg: "kubectl version: {{ kubectl_version.stdout }}"
+
+- name: Get oc version
+  command: oc version
+  register: oc_version
+  ignore_errors: true
+  changed_when: false
+  failed_when: "'FAILED' in oc_version.stderr"
+
+- name: Print oc version
+  debug:
+    msg: "oc version: {{ oc_version.stdout }}"

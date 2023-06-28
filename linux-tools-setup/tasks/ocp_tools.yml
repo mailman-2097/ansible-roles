@@ -1,0 +1,78 @@
+---
+- name: Check if kubectl client is installed
+  ansible.builtin.command: which kubectl
+  register: ocp_kubectl_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Check if oc_cli client is installed
+  ansible.builtin.command: which oc
+  register: ocp_cli_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Install kubectl and OC tools
+  import_tasks: ocp_tool_kubectl.yml
+  when: ocp_cli_check.rc != 0 or ocp_kubectl_check.rc != 0 
+
+- name: Check if helm client is installed
+  ansible.builtin.command: which helm
+  register: ocp_helm_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Install Helm tool
+  import_tasks: ocp_tool_helm.yml
+  when: ocp_helm_check.rc != 0
+
+- name: Check if tkn client is installed
+  ansible.builtin.command: which tkn
+  register: ocp_tkn_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Install tkn tool
+  import_tasks: ocp_tool_tekton.yml
+  when: ocp_tkn_check.rc != 0
+
+- name: Check if stern client is installed
+  ansible.builtin.command: which stern
+  register: ocp_stern_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Install stern tool
+  import_tasks: ocp_tool_github.yml
+  when: ocp_stern_check.rc != 0
+  vars:
+    owner: stern
+    repo: stern
+    asset_name_filter: linux_amd64
+
+- name: Check if kubectl-neat client is installed
+  ansible.builtin.command: which kubectl-neat
+  register: ocp_kneat_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Install kubectl-neat tool
+  import_tasks: ocp_tool_github.yml
+  when: ocp_kneat_check.rc != 0
+  vars:
+    owner: itaysk
+    repo: kubectl-neat
+    asset_name_filter: linux_amd64
+
+- name: Check if argocd client is installed
+  ansible.builtin.command: which argocd
+  register: ocp_argocd_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Install argocd tool
+  import_tasks: ocp_tool_github_argo.yml
+  when: ocp_argocd_check.rc != 0
+  vars:
+    owner: argoproj
+    repo: argo-cd
+    asset_name_filter: linux-amd64

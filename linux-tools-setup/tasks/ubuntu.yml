@@ -1,0 +1,13 @@
+---
+# tasks file
+
+- name: Install packages
+  become: true
+  become_method: sudo
+  ansible.builtin.apt:
+    name:
+      - dos2unix
+      - jq
+      - neofetch
+    state: present
+
