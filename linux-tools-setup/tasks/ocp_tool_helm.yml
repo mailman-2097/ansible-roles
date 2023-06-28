@@ -1,0 +1,42 @@
+---
+- name: Set proxy environment variables
+  ansible.builtin.set_fact:
+    http_proxy: lookup('ansible.builtin.env', 'http_proxy')
+    https_proxy: lookup('ansible.builtin.env', 'http_proxy')
+    no_proxy: localhost,127.0.0.1
+
+- name: Download helm
+  get_url:
+    url: https://developers.redhat.com/content-gateway/file/pub/openshift-v4/clients/helm/3.11.1/helm-linux-amd64.tar.gz
+    dest: /tmp/helm-linux-amd64.tar.gz
+
+- name: Extract helm
+  become: true
+  become_method: sudo
+  unarchive:
+    src: /tmp/helm-linux-amd64.tar.gz
+    dest: /tmp
+    exclude:
+      - LICENSE
+      - README.md
+    owner: "{{ ansible_facts.env.USER }}"
+    group: "{{ ansible_facts.env.USER }}"
+
+- name: Copy file with owner and permissions
+  become: true
+  become_method: sudo
+  ansible.builtin.copy:
+    src: /tmp/helm-linux-amd64
+    dest: /usr/local/bin/helm
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Get helm version
+  command: helm version
+  register: helm_version
+  changed_when: false
+
+- name: Print helm version
+  debug:
+    msg: "helm version: {{ helm_version.stdout }}"

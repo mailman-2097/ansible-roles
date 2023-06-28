@@ -1,0 +1,57 @@
+---
+- name: Set proxy environment variables
+  ansible.builtin.set_fact:
+    http_proxy: lookup('ansible.builtin.env', 'http_proxy')
+    https_proxy: lookup('ansible.builtin.env', 'http_proxy')
+    no_proxy: localhost,127.0.0.1
+
+- name: Download tkn
+  get_url:
+    url: https://mirror.openshift.com/pub/openshift-v4/clients/pipeline/latest/tkn-linux-amd64.tar.gz
+    dest: /tmp/tkn-linux-amd64.tar.gz
+
+- name: Extract tkn
+  become: true
+  become_method: sudo
+  unarchive:
+    src: /tmp/tkn-linux-amd64.tar.gz
+    dest: /usr/local/bin
+    owner: root
+    group: root
+    mode: '0755'
+    exclude:
+      - LICENSE
+      - README.md
+
+- name: Get tkn version
+  command: tkn version
+  register: tkn_version
+  ignore_errors: true
+  changed_when: false
+  failed_when: "'FAILED' in tkn_version.stderr"
+
+- name: Print tkn version
+  debug:
+    msg: "tkn version: {{ tkn_version.stdout }}"
+
+- name: Get tkn-pac version
+  command: tkn-pac version
+  register: tkn_pac_version
+  ignore_errors: true
+  changed_when: false
+  failed_when: "'FAILED' in tkn_pac_version.stderr"
+
+- name: Print tkn-pac version
+  debug:
+    msg: "tkn-pac version: {{ tkn_pac_version.stdout }}"
+
+- name: Get opc version
+  command: opc version
+  register: opc_version
+  ignore_errors: true
+  changed_when: false
+  failed_when: "'FAILED' in opc_version.stderr"
+
+- name: Print opc version
+  debug:
+    msg: "opc version: {{ opc_version.stdout }}"
