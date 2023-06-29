@@ -34,16 +34,18 @@
   ansible.builtin.debug:
     var: asset_url
 
+# asset_name.stdout is giving me issues in this playbook. Not sure why.
+# since the tool name matches the repo name. calling it a day.
 - name: Download the latest asset
   get_url:
     url: "{{ asset_url.stdout }}"
-    dest: /tmp/{{ asset_name.stdout | string }}
+    dest: /tmp/{{ repo | string }}
 
 - name: Copy file with owner and permissions
   become: true
   become_method: sudo
   ansible.builtin.copy:
-    src: /tmp/{{ asset_name.stdout | string }}
+    src: /tmp/{{ repo | string }}
     dest: /usr/local/bin
     owner: root
     group: root
