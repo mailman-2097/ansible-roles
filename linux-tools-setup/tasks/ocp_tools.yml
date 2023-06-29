@@ -64,7 +64,7 @@
     asset_name_filter: linux_amd64
 
 - name: Check if argocd client is installed
-  ansible.builtin.command: which argocd
+  ansible.builtin.command: which argo-cd
   register: ocp_argocd_check
   ignore_errors: true
   changed_when: false
@@ -76,3 +76,18 @@
     owner: argoproj
     repo: argo-cd
     asset_name_filter: linux-amd64
+
+- name: Check if kubeseal client is installed
+  ansible.builtin.command: which kubeseal
+  register: ocp_kubeseal_check
+  ignore_errors: true
+  changed_when: false
+
+# Filter update
+- name: Install kubeseal tool
+  import_tasks: ocp_tool_github_kubeseal.yml
+  when: ocp_kubeseal_check.rc != 0
+  vars:
+    owner: bitnami-labs
+    repo: sealed-secrets
+    asset_name_filter: linux-amd64.tar.gz
