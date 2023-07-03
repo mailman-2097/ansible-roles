@@ -14,11 +14,13 @@
     content: "{{ release_info.content }}"
     dest: /tmp/{{ repo }}_release_info.json
 
+# Filter is not generic
 - name: Find asset name for linux
   shell: cat /tmp/{{ repo }}_release_info.json | jq '.assets[] | select(.name | endswith("{{ asset_name_filter }}")) | .name'
   register: asset_name
   changed_when: false
 
+# Filter is not generic
 - name: Find download_url asset name
   shell: cat /tmp/{{ repo }}_release_info.json | jq -r '.assets[] | select(.name | endswith("{{ asset_name_filter }}")) | .browser_download_url'
   register: asset_url
