@@ -105,3 +105,14 @@
     owner: getsops
     repo: sops
     asset_name_filter: linux.amd64
+
+- name: Check if aws client is installed
+  ansible.builtin.command: which aws
+  register: ocp_awscli_check
+  ignore_errors: true
+  changed_when: false
+
+# removed vars as there is issue in scope. Not sure why? :(
+- name: Install aws cli tool
+  import_tasks: ocp_tool_awscli.yml
+  when: ocp_awscli_check.rc != 0
