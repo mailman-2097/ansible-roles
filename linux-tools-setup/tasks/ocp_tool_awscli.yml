@@ -1,0 +1,18 @@
+---
+- name: Download the latest asset and save it
+  get_url:
+    url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+    dest: /tmp/awscliv2.zip
+
+- name: Unzip
+  unarchive:
+    src: /tmp/awscliv2.zip
+    dest: /tmp/
+
+- name: Run Install with defaults 
+  shell: ./aws/install
+  args:
+    chdir: /tmp
+  become: true
+  become_method: sudo
+  register: command_execution
