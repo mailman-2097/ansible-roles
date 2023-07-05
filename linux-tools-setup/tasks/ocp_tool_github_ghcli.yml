@@ -65,12 +65,10 @@
     group: root
     mode: '0755'
 
+# Man files were zipped and these are not
 - name: Copy man pages
   become: true
   become_method: sudo
   ansible.builtin.copy:
     src: /tmp/{{ asset_folder | string }}/share/man/man1/
     dest: /tmp/man1/
-    owner: root
-    group: root
-    mode: '0755'
