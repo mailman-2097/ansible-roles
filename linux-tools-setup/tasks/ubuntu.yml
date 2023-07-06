@@ -11,4 +11,5 @@
       - neofetch
       - unzip
       - tree
+      - podman
     state: present
