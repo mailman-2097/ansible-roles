@@ -33,6 +33,6 @@ cleanup tool files
 
 ```
 
-sudo rm helm kubectl kubectl-neat oc opc stern tkn tkn-pac kubeseal argo-cd gh
+sudo rm helm kubectl kubectl-neat oc opc stern tkn tkn-pac kubeseal argo-cd
 
 ```
