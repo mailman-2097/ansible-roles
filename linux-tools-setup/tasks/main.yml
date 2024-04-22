@@ -3,6 +3,12 @@
 #   ansible.builtin.debug:
 #     var: ansible_facts
 
+- name: Set proxy environment variables
+  ansible.builtin.set_fact:
+    http_proxy: lookup('ansible.builtin.env', 'http_proxy')
+    https_proxy: lookup('ansible.builtin.env', 'http_proxy')
+    no_proxy: lookup('ansible.builtin.env', 'no_proxy')
+
 - name: package install if redhat
   import_tasks: redhat.yml
   when: ansible_facts['os_family']|lower == 'redhat' or ansible_facts['distribution_file_variety']|lower == 'redhat'
