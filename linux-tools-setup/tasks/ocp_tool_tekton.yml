@@ -1,9 +1,4 @@
 ---
-- name: Set proxy environment variables
-  ansible.builtin.set_fact:
-    http_proxy: lookup('ansible.builtin.env', 'http_proxy')
-    https_proxy: lookup('ansible.builtin.env', 'http_proxy')
-    no_proxy: localhost,127.0.0.1
 
 - name: Download tkn
   get_url:

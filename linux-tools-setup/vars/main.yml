@@ -1,2 +1,7 @@
 ---
-# vars file 
+# vars file
+
+proxy_env:
+  http_proxy: "http://proxy.det.nsw.edu.au:80"
+  https_proxy: "http://proxy.det.nsw.edu.au:80"
+  no_proxy: "localhost,127.0.0.1,*.nsw.education"

@@ -1,6 +1,11 @@
 ---
 # tasks file
-
+# - name: Set proxy environment variables
+#   ansible.builtin.set_fact:
+#     http_proxy: lookup('ansible.builtin.env', 'http_proxy')
+#     https_proxy: lookup('ansible.builtin.env', 'https_proxy')
+#     no_proxy: lookup('ansible.builtin.env', 'no_proxy')
+  
 - name: Install packages
   become: true
   become_method: sudo

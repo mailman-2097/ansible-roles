@@ -5,7 +5,7 @@
 
 - name: package install if redhat
   import_tasks: redhat.yml
-  when: ansible_facts['os_family']|lower == 'redhat'
+  when: ansible_facts['os_family']|lower == 'redhat' or ansible_facts['distribution_file_variety']|lower == 'redhat'
 
 - name: package install if debian
   import_tasks: debian.yml

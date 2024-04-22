@@ -1,1 +1,12 @@
 ---
+- name: Install packages
+  become: true
+  become_method: sudo
+  ansible.builtin.dnf:
+    name:
+      - dos2unix
+      - jq
+      - neofetch
+      - unzip
+      - tree
+    state: present

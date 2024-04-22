@@ -92,41 +92,41 @@
     repo: sealed-secrets
     asset_name_filter: linux-amd64.tar.gz
 
-- name: Check if sops client is installed
-  ansible.builtin.command: which sops
-  register: ocp_sops_check
-  ignore_errors: true
-  changed_when: false
+# - name: Check if sops client is installed
+#   ansible.builtin.command: which sops
+#   register: ocp_sops_check
+#   ignore_errors: true
+#   changed_when: false
 
-- name: Install sops tool
-  import_tasks: ocp_tool_github_argo.yml
-  when: ocp_sops_check.rc != 0
-  vars:
-    owner: getsops
-    repo: sops
-    asset_name_filter: linux.amd64
+# - name: Install sops tool
+#   import_tasks: ocp_tool_github_argo.yml
+#   when: ocp_sops_check.rc != 0
+#   vars:
+#     owner: getsops
+#     repo: sops
+#     asset_name_filter: linux.amd64
 
-- name: Check if aws client is installed
-  ansible.builtin.command: which aws
-  register: ocp_awscli_check
-  ignore_errors: true
-  changed_when: false
+# - name: Check if aws client is installed
+#   ansible.builtin.command: which aws
+#   register: ocp_awscli_check
+#   ignore_errors: true
+#   changed_when: false
 
 # removed vars as there is issue in scope. Not sure why? :(
-- name: Install aws cli tool
-  import_tasks: ocp_tool_awscli.yml
-  when: ocp_awscli_check.rc != 0
+# - name: Install aws cli tool
+#   import_tasks: ocp_tool_awscli.yml
+#   when: ocp_awscli_check.rc != 0
 
-- name: Check if gh client is installed
-  ansible.builtin.command: which gh
-  register: ocp_ghcli_check
-  ignore_errors: true
-  changed_when: false
+# - name: Check if gh client is installed
+#   ansible.builtin.command: which gh
+#   register: ocp_ghcli_check
+#   ignore_errors: true
+#   changed_when: false
 
-- name: Install gh tool
-  import_tasks: ocp_tool_github_ghcli.yml
-  when: ocp_ghcli_check.rc != 0
-  vars:
-    owner: cli
-    repo: cli
-    asset_name_filter: linux_amd64.tar.gz
+# - name: Install gh tool
+#   import_tasks: ocp_tool_github_ghcli.yml
+#   when: ocp_ghcli_check.rc != 0
+#   vars:
+#     owner: cli
+#     repo: cli
+#     asset_name_filter: linux_amd64.tar.gz
