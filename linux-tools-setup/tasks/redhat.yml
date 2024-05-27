@@ -6,7 +6,6 @@
     name:
       - dos2unix
       - jq
-      - neofetch
       - unzip
       - tree
     state: present

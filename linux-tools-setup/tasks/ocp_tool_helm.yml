@@ -16,7 +16,7 @@
     mode: '0755'
 
 - name: Get helm version
-  command: helm version
+  command: /usr/local/bin/helm version
   register: helm_version
   changed_when: false
 
