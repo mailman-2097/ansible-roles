@@ -13,7 +13,6 @@
     name:
       - dos2unix
       - jq
-      - neofetch
       - unzip
       - tree
       - podman
