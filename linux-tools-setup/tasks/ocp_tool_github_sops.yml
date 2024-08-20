@@ -1,0 +1,54 @@
+---
+- name: Get the latest release info
+  uri:
+    url: "https://api.github.com/repos/{{ owner }}/{{ repo }}/releases/latest"
+    return_content: yes
+  register: release_info
+  
+- name: Get the latest release tag
+  set_fact:
+    asset_tag: "{{ release_info.json.tag_name }}"
+
+- name: Write API response to JSON file
+  copy:
+    content: "{{ release_info.content }}"
+    dest: /tmp/{{ repo }}_release_info.json
+
+- name: Find asset name for linux
+  shell: cat /tmp/{{ repo }}_release_info.json | jq '.assets[] | select(.name | endswith("{{ asset_name_filter }}")) | .name'
+  register: asset_name
+  changed_when: false
+
+- name: Find download_url asset name
+  shell: cat /tmp/{{ repo }}_release_info.json | jq -r '.assets[] | select(.name | endswith("{{ asset_name_filter }}")) | .browser_download_url'
+  register: asset_url
+  changed_when: false
+
+- name: Debug
+  ansible.builtin.debug:
+    var: asset_tag
+
+- name: Debug
+  ansible.builtin.debug:
+    var: asset_name
+
+- name: Debug
+  ansible.builtin.debug:
+    var: asset_url
+
+# asset_name.stdout is giving me issues in this playbook. Not sure why.
+# since the tool name matches the repo name. calling it a day.
+- name: Download the latest asset
+  get_url:
+    url: "{{ asset_url.stdout }}"
+    dest: /tmp/{{ repo | string }}
+
+- name: Copy file with owner and permissions
+  become: true
+  become_method: sudo
+  ansible.builtin.copy:
+    src: /tmp/{{ repo | string }}
+    dest: /usr/local/bin
+    owner: root
+    group: root
+    mode: '0755'

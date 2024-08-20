@@ -1,4 +1,23 @@
 ---
+- name: Check if sops client is installed
+  ansible.builtin.command: which sops
+  register: ocp_sops_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Install sops tool
+  import_tasks: ocp_tool_github_sops.yml
+  when: ocp_sops_check.rc != 0
+  vars:
+    owner: getsops
+    repo: sops
+    asset_name_filter: linux.amd64
+
+# - name: Exit
+#   fail:
+#     msg: "Exit"
+#   when: true
+
 - name: Check if kubectl client is installed
   ansible.builtin.command: which kubectl
   register: ocp_kubectl_check
@@ -91,20 +110,6 @@
     owner: bitnami-labs
     repo: sealed-secrets
     asset_name_filter: linux-amd64.tar.gz
-
-# - name: Check if sops client is installed
-#   ansible.builtin.command: which sops
-#   register: ocp_sops_check
-#   ignore_errors: true
-#   changed_when: false
-
-# - name: Install sops tool
-#   import_tasks: ocp_tool_github_argo.yml
-#   when: ocp_sops_check.rc != 0
-#   vars:
-#     owner: getsops
-#     repo: sops
-#     asset_name_filter: linux.amd64
 
 # - name: Check if aws client is installed
 #   ansible.builtin.command: which aws
